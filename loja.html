@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PIX STORE</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#000;
+    color:white;
+    padding:30px;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:40px;
+    flex-wrap:wrap;
+    gap:20px;
+}
+
+.logo h1{
+    font-size:42px;
+}
+
+.logo p{
+    color:#888;
+    margin-top:5px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:25px;
+}
+
+.card{
+    background:#111;
+    border-radius:28px;
+    overflow:hidden;
+    transition:.3s;
+    border:1px solid #222;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+.card img{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+}
+
+.content{
+    padding:20px;
+}
+
+.top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.id{
+    background:#1f1f1f;
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:12px;
+    color:#bbb;
+}
+
+.stock{
+    color:#00ff88;
+    font-size:13px;
+}
+
+.content h2{
+    font-size:24px;
+    margin-bottom:10px;
+}
+
+.price{
+    font-size:32px;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+.buttons{
+    display:flex;
+    gap:10px;
+}
+
+.checkout{
+    margin-top:50px;
+    background:#111;
+    border:1px solid #222;
+    border-radius:30px;
+    padding:35px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:20px;
+}
+
+.checkout h3{
+    font-size:32px;
+    margin-bottom:10px;
+}
+
+.checkout p{
+    color:#888;
+    max-width:600px;
+}
+
+.checkout button{
+    background:white;
+    color:black;
+    border:none;
+    padding:18px 30px;
+    border-radius:20px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+</style>
+</head>
+<body>
+
+<div class="header">
+
+    <div class="logo">
+        <h1>PIX STORE</h1>
+        <p>Loja integrada com pagamentos PIX</p>
+    </div>
+</div>
+
+<div class="grid">
+
+    <div class="card">
+
+        <img src="https://picsum.photos/400/300?1">
+
+        <div class="content">
+
+            <div class="top">
+                <div class="id">ID #1</div>
+                <div class="stock">Em estoque</div>
+            </div>
+
+            <h2>Mouse Gamer RGB</h2>
+
+            <div class="price">
+                R$ 59,90
+            </div>
+
+            <div class="buttons">
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <img src="https://picsum.photos/400/300?2">
+
+        <div class="content">
+
+            <div class="top">
+                <div class="id">ID #2</div>
+                <div class="stock">Em estoque</div>
+            </div>
+
+            <h2>Teclado Mecânico</h2>
+
+            <div class="price">
+                R$ 129,90
+            </div>
+
+            <div class="buttons">
+            
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <img src="https://picsum.photos/400/300?3">
+
+        <div class="content">
+
+            <div class="top">
+                <div class="id">ID #3</div>
+                <div class="stock">Em estoque</div>
+            </div>
+
+            <h2>Headset Pro</h2>
+
+            <div class="price">
+                R$ 199,90
+            </div>
+
+            <div class="buttons">
+            
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <img src="https://picsum.photos/400/300?4">
+
+        <div class="content">
+
+            <div class="top">
+                <div class="id">ID #4</div>
+                <div class="stock">Em estoque</div>
+            </div>
+
+            <h2>Monitor Gamer</h2>
+
+            <div class="price">
+                R$ 899,90
+            </div>
+
+            <div class="buttons">
+            </div>
+        </div>
+    </div>
+         <div class="card">
+            <img src="https://picsum.photos/400/300?4">
+            <div class="content">
+
+            <div class="top">
+                <div class="id">ID #5</div>
+                <div class="stock">Em estoque</div>
+            </div>
+            
+            <h2>Maquita</h2>
+
+            <div class="price">
+                R$ 1000,00
+            </div>
+
+            <div class="buttons">
+             </div>
+    
+        </div>
+
+         </div>
+    </div>
+<div class="checkout">
+
+    <div>
+        <h3>Pagamento via PIX</h3>
+        <p>
+            Sistema integrado com QR Code automático, IDs de produtos e pagamentos rápidos.
+        </p>
+    </div>
+
+    <button>
+        <a href="index.html">Abrir Checkout</a>
+    </button>
+
+</div>
+
+</body>
+</html>

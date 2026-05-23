@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Nubank Pay</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:black;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    color:white;
+}
+
+.container{
+    width:100%;
+    max-width:430px;
+    background:#111;
+    border-radius:28px;
+    padding:30px;
+    box-shadow:0 0 40px rgba(0,0,0,.5);
+}
+
+.topo{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.topo h1{
+    font-size:34px;
+    color:white;
+}
+
+.topo p{
+    color:#ccc;
+    margin-top:6px;
+}
+
+.card{
+    background:#1c1c1c;
+    border-radius:22px;
+    padding:22px;
+    margin-bottom:20px;
+}
+
+.card label{
+    display:block;
+    margin-bottom:8px;
+    font-size:14px;
+    color:#aaa;
+}
+
+.card input{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:14px;
+    background:#2a2a2a;
+    color:white;
+    margin-bottom:15px;
+    outline:none;
+}
+
+button{
+    width:100%;
+    padding:16px;
+    border:none;
+    border-radius:18px;
+    background:white;
+    color:black;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.resultado{
+    margin-top:25px;
+    text-align:center;
+}
+
+.resultado img{
+    width:230px;
+    margin-top:18px;
+    background:white;
+    padding:10px;
+    border-radius:20px;
+}
+
+.status{
+    margin-top:15px;
+    background:#1f1f1f;
+    padding:14px;
+    border-radius:14px;
+    font-size:14px;
+}
+
+.copy{
+    margin-top:15px;
+    background:#2a2a2a;
+    padding:12px;
+    border-radius:12px;
+    word-break:break-all;
+    font-size:13px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="topo">
+        <h1>Sistema de Pagamentos PIX</h1>
+        <p>Sistema de pagamentos online</p>
+    </div>
+
+    <div class="card">
+
+        <label>Nome</label>
+        <input type="text" id="nome" placeholder="Digite seu nome">
+
+        <label>Email</label>
+        <input type="email" id="email" placeholder="Digite seu email">
+
+        <label>ID do Produto</label>
+        <input type="number" id="produtoId" placeholder="Digite o ID">
+
+        <label>Valor</label>
+        <input type="text" id="valor" readonly placeholder="Preço automático">
+
+    </div>
+
+    <button onclick="pagar()">
+        Gerar PIX
+    </button>
+
+    <div class="resultado" id="resultado"></div>
+
+</div>
+
+<script>
+
+const produtos = {
+
+    1:{
+        nome:"Mouse Gamer",
+        preco:59.90
+    },
+
+    2:{
+        nome:"Teclado RGB",
+        preco:129.90
+    },
+
+    3:{
+        nome:"Headset",
+        preco:199.90
+    },
+
+    4:{
+        nome:"Monitor Gamer",
+        preco:899.90
+    },
+    
+    5:{
+        nome:"Maquita",
+        preco:1000.00
+    },
+};
+
+document
+.getElementById("produtoId")
+.addEventListener("input",()=>{
+
+    const id =
+    document.getElementById("produtoId").value;
+
+    const produto =
+    produtos[id];
+
+    if(produto){
+
+        document.getElementById("valor")
+        .value = produto.preco.toFixed(2);
+
+    }else{
+
+        document.getElementById("valor")
+        .value = "";
+
+    }
+
+});
+
+function crc16(payload){
+
+    function ord(str){
+        return str.charCodeAt(0);
+    }
+
+    let crc = 0xFFFF;
+
+    for(let i = 0; i < payload.length; i++){
+
+        crc ^= ord(payload[i]) << 8;
+
+        for(let j = 0; j < 8; j++){
+
+            if((crc & 0x8000) !== 0){
+                crc = (crc << 1) ^ 0x1021;
+            }else{
+                crc <<= 1;
+            }
+
+            crc &= 0xFFFF;
+        }
+    }
+
+    return crc
+    .toString(16)
+    .toUpperCase()
+    .padStart(4,"0");
+}
+
+function campo(id, valor){
+
+    return id +
+    valor.length.toString().padStart(2,"0") +
+    valor;
+
+}
+
+function gerarPix(valor){
+
+    const chavePix = "49151218879";
+
+    const merchantAccount =
+        campo("00","BR.GOV.BCB.PIX") +
+        campo("01",chavePix);
+
+    const payload =
+        campo("00","01") +
+        campo("26",merchantAccount) +
+        campo("52","0000") +
+        campo("53","986") +
+        campo("54",valor) +
+        campo("58","BR") +
+        campo("59","PEDRO HENRIQUE") +
+        campo("60","SAO PAULO") +
+        campo("62",campo("05","***")) +
+        "6304";
+
+    const crc = crc16(payload);
+
+    return payload + crc;
+}
+
+function pagar(){
+
+    const nome =
+    document.getElementById("nome").value;
+
+    const email =
+    document.getElementById("email").value;
+
+    const produtoId =
+    document.getElementById("produtoId").value;
+
+    const resultado =
+    document.getElementById("resultado");
+
+    const produto =
+    produtos[produtoId];
+
+    if(!nome || !email || !produtoId){
+
+        resultado.innerHTML = `
+            <div class="status">
+                Preencha todos os campos
+            </div>
+        `;
+
+        return;
+    }
+
+    if(!produto){
+
+        resultado.innerHTML = `
+            <div class="status">
+                Produto não encontrado
+            </div>
+        `;
+
+        return;
+    }
+
+    const valor =
+    produto.preco.toFixed(2);
+
+    const pixCode =
+    gerarPix(valor);
+
+    resultado.innerHTML = `
+
+        <div class="status">
+            PIX gerado com sucesso
+        </div>
+
+        <div class="status">
+            Produto:
+            ${produto.nome}
+        </div>
+
+        <img
+        src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pixCode)}">
+
+        <div class="status">
+            Banco destino:
+            Nubank
+        </div>
+
+        <div class="status">
+            Chave PIX CPF:
+            49151218879
+        </div>
+
+        <div class="status">
+            Valor:
+            R$ ${valor}
+        </div>
+
+        <div class="copy"
+        onclick="navigator.clipboard.writeText('${pixCode}')">
+
+            ${pixCode}
+
+        </div>
+
+    `;
+}
+
+</script>
+
+</body>
+</html>
